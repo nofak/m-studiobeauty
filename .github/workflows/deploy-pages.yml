@@ -1,0 +1,50 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  # Web používá kořenové cesty (/assets/...), ale na adrese
+  # nofak.github.io/m-studiobeauty/ běží v podsložce, proto se cesty
+  # při nasazení přepisují. Až pojede web na vlastní doméně,
+  # nastavit BASE_PATH na prázdný řetězec "".
+  BASE_PATH: /m-studiobeauty
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Přepsat kořenové cesty na podsložku
+        if: env.BASE_PATH != ''
+        run: |
+          find static-web -name '*.html' -exec sed -i \
+            -e "s|href=\"/|href=\"${BASE_PATH}/|g" \
+            -e "s|src=\"/|src=\"${BASE_PATH}/|g" \
+            -e "s|srcset=\"/|srcset=\"${BASE_PATH}/|g" \
+            -e "s|, /assets/|, ${BASE_PATH}/assets/|g" \
+            {} +
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: static-web
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
