@@ -39,19 +39,10 @@ musí vracet 200.
 adres (`/panel-zakaznika/`, `/panel-masera/`, staré cesty k obrázkům) a cache
 hlavičky.
 
-### GitHub Pages (zdarma)
+### GitHub Pages (zdarma, volitelné)
 
-Repozitář obsahuje workflow `.github/workflows/deploy-pages.yml`, který při
-každém pushi do `main` nasadí obsah `static-web/` na GitHub Pages.
-
-Jednorázová aktivace: na GitHubu **Settings → Pages → Source: GitHub Actions**.
-Web pak běží na `https://nofak.github.io/m-studiobeauty/`.
-
-Pro provoz na vlastní doméně (www.m-studiobeauty.cz přes GitHub Pages):
-
-1. Settings → Pages → Custom domain → vyplnit `www.m-studiobeauty.cz`
-2. U registrátora domény nastavit CNAME záznam `www` → `nofak.github.io`
-3. Ve workflow nastavit `BASE_PATH: ""` (přepis cest je pak zbytečný)
-
-Pozn.: GitHub Pages neumí `.htaccess` — vynucené HTTPS řeší Pages samo,
-staré WordPress adresy vrátí 404 (řeší je vlastní `404.html`).
+Web lze zdarma provozovat i na GitHub Pages (Settings → Pages → Source:
+GitHub Actions + deploy workflow). Pozn.: Pages neumí `.htaccess` a web
+používá kořenové cesty (`/assets/...`), takže na adrese v podsložce
+(`nofak.github.io/m-studiobeauty/`) je potřeba cesty při nasazení přepsat;
+na vlastní doméně fungují beze změny.
