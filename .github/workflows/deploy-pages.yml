@@ -28,7 +28,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Přepsat kořenové cesty na podsložku
         if: env.BASE_PATH != ''
@@ -41,6 +41,9 @@ jobs:
             {} +
 
       - uses: actions/configure-pages@v5
+        with:
+          # založí Pages web automaticky, není nutné klikat v Settings
+          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
