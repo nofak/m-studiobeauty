@@ -3,6 +3,21 @@ Options -Indexes
 
 ErrorDocument 404 /404.html
 
+# bezpecnostni hlavicky
+<IfModule mod_headers.c>
+    # prohlizec si rok pamatuje, ze web bezi jen pres https
+    Header always set Strict-Transport-Security "max-age=31536000"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+    Header always set Cross-Origin-Opener-Policy "same-origin"
+    # CSP: povolene zdroje = vlastni web + Google Analytics (po souhlasu) + mapa mapy.cz.
+    # 'unsafe-inline' je nutne – CSS i skript cookie listy vklada build_site.py primo do HTML.
+    # Pri pridani dalsi externi sluzby (video, mapa, font…) je treba ji sem doplnit.
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://frame.mapy.cz https://mapy.com https://*.mapy.com https://*.seznam.cz; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+</IfModule>
+
 RewriteEngine On
 
 # presmerovani na https + www (kanonicka adresa)
