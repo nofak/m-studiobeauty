@@ -52,30 +52,13 @@ JSONLD = """<script type="application/ld+json">
 COOKIES_GA = """<div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Souhlas s cookies">
 <p>Používáme soubory cookies k měření návštěvnosti (Google Analytics). Souhlasíte s jejich použitím?</p>
 <div class="tlacitka">
-<button type="button" class="prijmout" onclick="cookieVolba(true)">Přijmout</button>
-<button type="button" class="odmitnout" onclick="cookieVolba(false)">Odmítnout</button>
+<button type="button" class="prijmout">Přijmout</button>
+<button type="button" class="odmitnout">Odmítnout</button>
 </div>
 </div>
-<script>
-function nactiGA(){
-  var s=document.createElement('script');s.async=true;
-  s.src='https://www.googletagmanager.com/gtag/js?id=%GA%';
-  document.head.appendChild(s);
-  window.dataLayer=window.dataLayer||[];
-  function gtag(){dataLayer.push(arguments);}
-  window.gtag=gtag;gtag('js',new Date());gtag('config','%GA%',{anonymize_ip:true});
-}
-function cookieVolba(souhlas){
-  localStorage.setItem('cookie-souhlas',souhlas?'ano':'ne');
-  document.getElementById('cookie-banner').classList.remove('zobrazit');
-  if(souhlas)nactiGA();
-}
-(function(){
-  var v=localStorage.getItem('cookie-souhlas');
-  if(v==='ano'){nactiGA();}
-  else if(v===null){document.getElementById('cookie-banner').classList.add('zobrazit');}
-})();
-</script>""".replace("%GA%", GA_ID)
+<script src="/assets/js/cookies.js" data-ga="%GA%"></script>""".replace("%GA%", GA_ID)
+# Skript cookie lišty je v samostatném souboru (ne inline), aby CSP v .htaccess
+# mohla zakázat inline skripty. Do HTML proto nepřidávat <script>…</script> ani onclick="".
 
 FB_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg>"""
 MAIL_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z"/></svg>"""

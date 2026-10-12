@@ -373,29 +373,10 @@ a.btn { color: var(--tmava); }
 <div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Souhlas s cookies">
 <p>Používáme soubory cookies k měření návštěvnosti (Google Analytics). Souhlasíte s jejich použitím?</p>
 <div class="tlacitka">
-<button type="button" class="prijmout" onclick="cookieVolba(true)">Přijmout</button>
-<button type="button" class="odmitnout" onclick="cookieVolba(false)">Odmítnout</button>
+<button type="button" class="prijmout">Přijmout</button>
+<button type="button" class="odmitnout">Odmítnout</button>
 </div>
 </div>
-<script>
-function nactiGA(){
-  var s=document.createElement('script');s.async=true;
-  s.src='https://www.googletagmanager.com/gtag/js?id=G-QL9HWX0Z2L';
-  document.head.appendChild(s);
-  window.dataLayer=window.dataLayer||[];
-  function gtag(){dataLayer.push(arguments);}
-  window.gtag=gtag;gtag('js',new Date());gtag('config','G-QL9HWX0Z2L',{anonymize_ip:true});
-}
-function cookieVolba(souhlas){
-  localStorage.setItem('cookie-souhlas',souhlas?'ano':'ne');
-  document.getElementById('cookie-banner').classList.remove('zobrazit');
-  if(souhlas)nactiGA();
-}
-(function(){
-  var v=localStorage.getItem('cookie-souhlas');
-  if(v==='ano'){nactiGA();}
-  else if(v===null){document.getElementById('cookie-banner').classList.add('zobrazit');}
-})();
-</script>
+<script src="/assets/js/cookies.js" data-ga="G-QL9HWX0Z2L"></script>
 </body>
 </html>

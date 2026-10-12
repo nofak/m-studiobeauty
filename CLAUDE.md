@@ -8,7 +8,7 @@ rezervační systém Amelia byl **záměrně vyřazen** (potvrzeno majitelem 202
 ## Struktura projektu
 
 - `static-web/` — **finální statický web** (nasazovaná verze). 5 stránek: `/`, `/sluzby/`,
-  `/ceniky/`, `/nase-provozovna/`, `/kontakt/` + `assets/` (css, fonty, obrázky),
+  `/ceniky/`, `/nase-provozovna/`, `/kontakt/` + `assets/` (css, js, fonty, obrázky),
   `.htaccess`, `robots.txt`, `sitemap.xml`, `404.html`.
 - `m-studiobeauty-static.zip` — archiv `static-web/` k nahrání na hosting.
 - `m-studiobeauty-static-v1-wordpress-mirror.tar.gz` — **záloha původního webu**
@@ -49,7 +49,22 @@ Naměřené hodnoty z originálu (Playwright/Chromium proti v1 mirroru):
    složku `assets/` a skrytý `.htaccess` (minule se nenahrály → web bez stylů!)
 2. Ověřit: `https://www.m-studiobeauty.cz/assets/css/style.css` musí vrátit 200
 3. `.htaccess` řeší: https+www redirect, 301 z `/panel-zakaznika/` a `/panel-masera/`
-   na `/kontakt/`, 301 ze starých `/wp-content/uploads/...` obrázků, cache hlavičky
+   na `/kontakt/`, 301 ze starých `/wp-content/uploads/...` obrázků, cache hlavičky,
+   bezpečnostní hlavičky (HSTS, nosniff, Referrer-Policy, Permissions-Policy, CSP)
+4. Po nahrání ověřit hlavičky: `curl -sI https://www.m-studiobeauty.cz/ | grep -i content-security`
+
+## Bezpečnostní hlavičky (CSP) — pozor při přidávání obsahu
+
+- CSP v `.htaccess` povoluje jen: vlastní web, Google Analytics, mapu mapy.cz
+  (`frame.mapy.cz` → přesměrovává přes `mapy.com` a `login.seznam.cz`).
+  **Každou novou externí službu** (video, další mapa, font, widget) je třeba do CSP
+  doplnit, jinak ji prohlížeč potichu zablokuje.
+- **Inline skripty jsou zakázané** — žádné `<script>…</script>` ani `onclick=""` v HTML.
+  Skripty patří do `static-web/assets/js/` (cookie lišta + GA: `cookies.js`).
+  JSON-LD (`application/ld+json`) je datový blok a CSP mu nevadí.
+- HSTS je zatím jen na 1 den (`max-age=86400`); po ověření, že se certifikát na
+  hostingu sám obnovuje, zvýšit na rok.
+- Lokální `python3 -m http.server` hlavičky z `.htaccess` neposílá — CSP se takto neotestuje.
 
 ## Nedodělky / bezpečnost
 

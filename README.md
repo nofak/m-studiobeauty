@@ -36,8 +36,12 @@ Nahrát **kompletní obsah** složky `static-web/` do web rootu — včetně slo
 musí vracet 200.
 
 `.htaccess` zajišťuje: přesměrování na https+www, 301 ze starých WordPress
-adres (`/panel-zakaznika/`, `/panel-masera/`, staré cesty k obrázkům) a cache
-hlavičky.
+adres (`/panel-zakaznika/`, `/panel-masera/`, staré cesty k obrázkům), cache
+hlavičky a bezpečnostní hlavičky (HSTS, CSP aj.).
+
+Pozor na CSP: povoluje jen vlastní web, Google Analytics a mapu mapy.cz.
+Novou externí službu (video, mapa, font) je nutné do CSP v `.htaccess` doplnit
+a skripty dávat do `assets/js/`, ne přímo do HTML — inline skripty jsou zakázané.
 
 ### GitHub Pages (zdarma, volitelné)
 
